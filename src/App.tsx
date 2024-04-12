@@ -19,7 +19,7 @@ export type Action =
   | { type: 'delete-digit' }
   | { type: 'evaluate' };
 
-
+// Handles all the actions
 function reducer(state, { type, payload }){
   switch(type){
     case ACTIONS.ADD_DIGITS:
@@ -30,7 +30,12 @@ function reducer(state, { type, payload }){
           overwrite: false
         }
       }
-      if (payload.digit === "0" && state.currentOperand === "0") return state
+      if (state.currentOperand === "0" && payload.digit !== ".") {
+        return {
+          ...state,
+          currentOperand: payload.digit
+        };
+      }
       if (payload.digit === "." && state.currentOperand.includes(".")) return state
       return { 
         ...state, 
@@ -60,8 +65,11 @@ function reducer(state, { type, payload }){
         operation: payload.operation,
         currentOperand: null
       };
-    case ACTIONS.CLEAR: 
-      return initialState;
+    case ACTIONS.CLEAR:       
+      return {
+        ...initialState,
+        currentOperand: "0"
+      };
     case ACTIONS.DELETE_DIGIT: 
       if (state.overwrite) {
         return {
@@ -91,6 +99,7 @@ function reducer(state, { type, payload }){
   }
 }
 
+// Evaluate the expression when an operation is chosen
 function evaluate( {currentOperand, previousOperand, operation} ){
   const prev = parseFloat(previousOperand)
   const current = parseFloat(currentOperand)
@@ -118,17 +127,17 @@ function evaluate( {currentOperand, previousOperand, operation} ){
 
 // Define an initial state for your reducer
 const initialState = {
-  currentOperand: null,
+  currentOperand: "0",
   previousOperand: null,
   operation: null,
 };
-
+// formats the numbers to have a europe/german format
 const INTEGER_FORMATTER = new Intl.NumberFormat('de-DE', {
   maximumFractionDigits: 0,
 });
-
+// formats the number to have a comma as a decimal separator
 function formatOperand(operand) {
-  if (operand == null) return;
+  if (operand == null || operand === "") return "0";
   const [integer, decimal] = operand.split(".");
   if (decimal == null) return INTEGER_FORMATTER.format(parseFloat(integer));
   return `${INTEGER_FORMATTER.format(parseFloat(integer))},${decimal}`;
