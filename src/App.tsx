@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useReducer, useEffect } from 'react';
 import './App.css'
 import DigitButton from './DigitButton'
 import OperationButton from './OperationButton'
@@ -144,10 +144,67 @@ function formatOperand(operand) {
 }
 
 function App() { 
-  const [{currentOperand, previousOperand, operation}, dispatch] = useReducer(reducer, initialState)  
+  const [{currentOperand, previousOperand, operation}, dispatch] = useReducer(reducer, initialState);
+
+  // maps key presses to dispatch actions based on the keys pressed
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      switch(event.key) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '.':
+          dispatch({ type: ACTIONS.ADD_DIGITS, payload: { digit: event.key } });
+          break;
+        case '+':
+          dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: { operation: '+' } });
+          break;
+        case '-':
+          dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: { operation: '-' } });
+          break;
+        case '*':
+          dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: { operation: '*' } });
+          break;
+        case '/':
+          dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: { operation: '÷' } });
+          break;
+        case 'Enter':
+          dispatch({ type: ACTIONS.EVALUATE });
+          break;
+        case 'Escape':
+          dispatch({ type: ACTIONS.CLEAR });
+          break;
+        case 'Backspace':
+          dispatch({ type: ACTIONS.DELETE_DIGIT });
+          break;
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
+  useEffect(() => {
+    const calculatorDiv = document.getElementById('calculator');
+    if (calculatorDiv) calculatorDiv.focus();
+  }, []);
+  
+  
 
   return (
-    <div className="calculator-grid">
+    <div id="calculator" tabIndex={0} className="calculator-grid">
       <div className="output">
         <div className="previous-operand">{previousOperand} {operation}</div>
         <div className="current-operand">{formatOperand(currentOperand)}</div>
