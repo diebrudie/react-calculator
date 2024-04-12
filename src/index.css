@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale; 
 }
 
+@media (max-width: 768px) {
+  :root {
+    font-size: 15px; /* Smaller base font size, affects all rem calculations */
+  }
+}
+
 a {
   font-weight: 500;
   color: #646cff;

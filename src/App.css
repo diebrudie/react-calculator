@@ -60,3 +60,29 @@ body {
   color: white;
   font-size: 2.5rem;
 }
+
+@media (max-width: 768px) {
+  .calculator-grid {  
+    grid-template-columns: repeat(4, 4rem);  /* Smaller button widths */
+    grid-template-rows: minmax(5rem, auto) repeat(5, 4rem); /* Smaller button heights */
+    grid-gap: 2px; /* Reduce gap size */
+  }
+
+  .output {
+    font-size: 0.8rem; /* Smaller font size for the display */
+  }
+
+  button {
+    padding: 0.4em 0.8em; /* Smaller padding */
+    font-size: 0.9rem; /* Smaller font size for buttons */
+  }
+
+  .span-two {
+    grid-column: span 2; /* Ensure wide buttons span correctly */
+  }
+
+  .previous-operand, .current-operand {
+    font-size: 1.2rem; /* Adjust font size for operands */
+  }
+  
+}
