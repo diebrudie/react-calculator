@@ -1,3 +1,5 @@
+//video followed: https://www.youtube.com/watch?v=DgRrrOt0Vr8
+
 import { useReducer, useEffect } from 'react';
 import './App.css'
 import DigitButton from './DigitButton'
