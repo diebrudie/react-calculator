@@ -22,7 +22,11 @@ body {
   text-align: center;
 }
 
-.calculator-grid {
+#calculator:focus {
+  outline: none;
+}
+
+.calculator-grid {  
   display: grid;
   margin-top: 2rem;
   justify-content: center;
